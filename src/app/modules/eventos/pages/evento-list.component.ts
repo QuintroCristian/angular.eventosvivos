@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -16,8 +16,8 @@ import { EventoCardComponent } from '../components/evento-card.component';
   styleUrls: ['./evento-list.component.scss']
 })
 export class EventoListComponent implements OnInit {
-  eventos: EventoResponseDto[] = [];
-  loading = true;
+  eventos = signal<EventoResponseDto[]>([]);
+  loading = signal(true);
   private readonly apiService = inject(ApiService);
 
   ngOnInit() {
@@ -25,14 +25,14 @@ export class EventoListComponent implements OnInit {
   }
 
   loadEventos() {
-    this.loading = true;
+    this.loading.set(true);
     this.apiService.getEventos().subscribe({
       next: (data) => {
-        this.eventos = data;
-        this.loading = false;
+        this.eventos.set(data);
+        this.loading.set(false);
       },
       error: () => {
-        this.loading = false;
+        this.loading.set(false);
       }
     });
   }

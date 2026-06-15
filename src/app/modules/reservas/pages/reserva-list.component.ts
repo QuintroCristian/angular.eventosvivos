@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -27,11 +27,11 @@ import { EstadoReserva } from '../../../core/models/enums';
   styleUrls: ['./reserva-list.component.scss']
 })
 export class ReservaListComponent implements OnInit {
-  reservas: ReservaResponseDto[] = [];
-  loading = true;
-  submitting = false;
-  errorMessage = '';
-  successMessage = '';
+  reservas = signal<ReservaResponseDto[]>([]);
+  loading = signal(true);
+  submitting = signal(false);
+  errorMessage = signal('');
+  successMessage = signal('');
 
   reservaForm: CrearReservaRequest = {
     eventoId: 1,
@@ -57,30 +57,30 @@ export class ReservaListComponent implements OnInit {
   }
 
   loadReservas(): void {
-    this.loading = true;
-    this.errorMessage = '';
+    this.loading.set(true);
+    this.errorMessage.set('');
 
     this.apiService.getReservas().subscribe({
       next: (data) => {
-        this.reservas = data;
-        this.loading = false;
+        this.reservas.set(data);
+        this.loading.set(false);
       },
       error: () => {
-        this.errorMessage = 'No fue posible cargar las reservas.';
-        this.loading = false;
+        this.errorMessage.set('No fue posible cargar las reservas.');
+        this.loading.set(false);
       }
     });
   }
 
   crearReserva(): void {
     if (!this.reservaForm.eventoId || this.reservaForm.cantidad <= 0) {
-      this.errorMessage = 'Completa los campos obligatorios para crear la reserva.';
+      this.errorMessage.set('Completa los campos obligatorios para crear la reserva.');
       return;
     }
 
-    this.submitting = true;
-    this.errorMessage = '';
-    this.successMessage = '';
+    this.submitting.set(true);
+    this.errorMessage.set('');
+    this.successMessage.set('');
 
     const payload: CrearReservaRequest = {
       eventoId: Number(this.reservaForm.eventoId),
@@ -91,8 +91,8 @@ export class ReservaListComponent implements OnInit {
 
     this.apiService.crearReserva(payload).subscribe({
       next: () => {
-        this.submitting = false;
-        this.successMessage = 'Reserva creada correctamente.';
+        this.submitting.set(false);
+        this.successMessage.set('Reserva creada correctamente.');
         this.reservaForm = {
           eventoId: 1,
           nombreComprador: '',
@@ -102,8 +102,8 @@ export class ReservaListComponent implements OnInit {
         this.loadReservas();
       },
       error: () => {
-        this.submitting = false;
-        this.errorMessage = 'No fue posible crear la reserva. Revisa los datos e intenta nuevamente.';
+        this.submitting.set(false);
+        this.errorMessage.set('No fue posible crear la reserva. Revisa los datos e intenta nuevamente.');
       }
     });
   }
