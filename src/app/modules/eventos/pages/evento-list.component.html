@@ -1,7 +1,10 @@
 <div class="evento-list-container">
   <div style="display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap;">
     <h1>Eventos Disponibles</h1>
-    <a mat-raised-button color="accent" routerLink="/reservas">Ver reservas</a>
+    <div style="display:flex; gap:1rem; flex-wrap:wrap;">
+      <a mat-raised-button color="primary" routerLink="/eventos/crear">+ Crear Evento</a>
+      <a mat-raised-button color="accent" routerLink="/reservas">Ver reservas</a>
+    </div>
   </div>
 
   @if (loading()) {

@@ -2,8 +2,9 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { EventoResponseDto } from '../models/evento.model';
+import { EventoResponseDto, CreateEventoRequest } from '../models/evento.model';
 import { CrearReservaRequest, ReservaResponseDto } from '../models/reserva.model';
+import { VenueResponseDto } from '../models/venue.model';
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +25,7 @@ export class ApiService {
     return this.http.get<EventoResponseDto>(`${this.baseUrl}/Eventos/ObtenerEvento/${id}`);
   }
 
-  crearEvento(evento: EventoResponseDto): Observable<EventoResponseDto> {
+  crearEvento(evento: CreateEventoRequest): Observable<EventoResponseDto> {
     return this.http.post<EventoResponseDto>(`${this.baseUrl}/Eventos/CrearEvento`, evento);
   }
 
@@ -61,5 +62,13 @@ export class ApiService {
 
   cancelarReserva(id: number): Observable<void> {
     return this.http.post<void>(`${this.baseUrl}/Reservas/CancelarReserva/${id}`, null);
+  }
+
+  getVenues(): Observable<VenueResponseDto[]> {
+    return this.http.get<VenueResponseDto[]>(`${this.baseUrl}/Venues/Listar`);
+  }
+
+  getVenueById(id: number): Observable<VenueResponseDto> {
+    return this.http.get<VenueResponseDto>(`${this.baseUrl}/Venues/Obtener/${id}`);
   }
 }

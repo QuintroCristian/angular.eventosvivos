@@ -13,3 +13,14 @@ export interface EventoResponseDto {
   capacidadMaxima: number;
   precio: number;
 }
+
+export interface CreateEventoRequest {
+  titulo: string;
+  descripcion: string;
+  venueId: number;
+  capacidadMaxima: number;
+  fechaInicio: string;
+  fechaFin: string;
+  precio: number;
+  tipo: TipoEvento;
+}
