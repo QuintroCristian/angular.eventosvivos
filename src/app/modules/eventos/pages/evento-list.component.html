@@ -1,0 +1,33 @@
+<div class="evento-list-container">
+  <h1>Eventos Disponibles</h1>
+
+  <div *ngIf="loading" class="loading-spinner">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <div *ngIf="!loading && eventos.length === 0" class="empty-state">
+    <p>No hay eventos disponibles en este momento.</p>
+  </div>
+
+  <div *ngIf="!loading && eventos.length > 0" class="eventos-grid">
+    <mat-card *ngFor="let evento of eventos" class="evento-card">
+      <mat-card-header>
+        <mat-card-title>{{ evento.titulo }}</mat-card-title>
+        <mat-card-subtitle>{{ evento.venueNombre }} - {{ evento.venueCiudad }}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <p>{{ evento.descripcion }}</p>
+        <div class="evento-details">
+          <p><strong>Tipo:</strong> {{ evento.tipo }}</p>
+          <p><strong>Fecha Inicio:</strong> {{ evento.fechaInicio | date: 'medium' }}</p>
+          <p><strong>Capacidad:</strong> {{ evento.capacidadMaxima }}</p>
+          <p><strong>Precio:</strong> ${{ evento.precio }}</p>
+        </div>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-raised-button color="primary">Ver Detalles</button>
+        <button mat-raised-button color="accent">Reservar</button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>

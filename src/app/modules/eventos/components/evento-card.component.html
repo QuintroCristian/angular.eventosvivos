@@ -1,0 +1,45 @@
+<mat-card class="evento-card">
+  <mat-card-header>
+    <mat-card-title>{{ evento.titulo }}</mat-card-title>
+    <mat-card-subtitle>
+      {{ evento.venueNombre }} - {{ evento.venueCiudad }}
+    </mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    <div class="evento-type-badge">
+      <mat-chip>{{ getTipoLabel(evento.tipo) }}</mat-chip>
+      <mat-chip [class.active-estado]="evento.estado === EstadoEvento.Activo">
+        {{ getEstadoLabel(evento.estado) }}
+      </mat-chip>
+    </div>
+
+    <p class="descripcion">{{ evento.descripcion }}</p>
+
+    <div class="evento-details">
+      <div class="detail-item">
+        <span class="label">Fecha Inicio:</span>
+        <span class="value">{{ evento.fechaInicio | date: 'medium' }}</span>
+      </div>
+      <div class="detail-item">
+        <span class="label">Fecha Fin:</span>
+        <span class="value">{{ evento.fechaFin | date: 'medium' }}</span>
+      </div>
+      <div class="detail-item">
+        <span class="label">Capacidad:</span>
+        <span class="value">{{ evento.capacidadMaxima }} personas</span>
+      </div>
+      <div class="detail-item price">
+        <span class="label">Precio:</span>
+        <span class="value">${{ evento.precio | number: '1.2-2' }}</span>
+      </div>
+    </div>
+  </mat-card-content>
+
+  <mat-card-actions>
+    <button mat-raised-button color="primary">Ver Detalles</button>
+    <button mat-raised-button color="accent" [disabled]="evento.estado !== EstadoEvento.Activo">
+      Reservar
+    </button>
+  </mat-card-actions>
+</mat-card>
