@@ -1,0 +1,70 @@
+<section class="reserva-page">
+  <h1>Gestión de Reservas</h1>
+
+  <div class="reserva-grid">
+    <mat-card class="panel-form">
+      <mat-card-header>
+        <mat-card-title>Crear reserva</mat-card-title>
+        <mat-card-subtitle>Usa el endpoint de OpenAPI /Reservas/CrearReserva.</mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <form class="reserva-form" (ngSubmit)="crearReserva()">
+          <mat-form-field appearance="outline">
+            <mat-label>ID del evento</mat-label>
+            <input matInput type="number" [(ngModel)]="reservaForm.eventoId" name="eventoId" required>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Nombre del comprador</mat-label>
+            <input matInput [(ngModel)]="reservaForm.nombreComprador" name="nombreComprador">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Email</mat-label>
+            <input matInput type="email" [(ngModel)]="reservaForm.emailComprador" name="emailComprador">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Cantidad</mat-label>
+            <input matInput type="number" min="1" [(ngModel)]="reservaForm.cantidad" name="cantidad" required>
+          </mat-form-field>
+
+          <button mat-raised-button color="primary" type="submit" [disabled]="submitting">
+            {{ submitting ? 'Creando...' : 'Crear reserva' }}
+          </button>
+        </form>
+
+        <p class="feedback success" *ngIf="successMessage">{{ successMessage }}</p>
+        <p class="feedback error" *ngIf="errorMessage">{{ errorMessage }}</p>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="panel-list">
+      <mat-card-header>
+        <mat-card-title>Reservas recientes</mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content>
+        <div *ngIf="loading" class="loading-spinner">
+          <mat-spinner></mat-spinner>
+        </div>
+
+        <div *ngIf="!loading && reservas.length === 0" class="empty-state">
+          <p>No hay reservas para mostrar.</p>
+        </div>
+
+        <div *ngIf="!loading && reservas.length > 0" class="reservas-list">
+          <article *ngFor="let reserva of reservas" class="reserva-card">
+            <h3>{{ reserva.eventoTitulo || 'Evento #' + reserva.eventoId }}</h3>
+            <p><strong>Comprador:</strong> {{ reserva.nombreComprador || 'Sin nombre' }}</p>
+            <p><strong>Email:</strong> {{ reserva.emailComprador || 'Sin email' }}</p>
+            <p><strong>Cantidad:</strong> {{ reserva.cantidad }}</p>
+            <p><strong>Monto total:</strong> ${{ reserva.montoTotal | number: '1.2-2' }}</p>
+            <p><strong>Estado:</strong> {{ getEstadoLabel(reserva.estado) }}</p>
+          </article>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</section>

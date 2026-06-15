@@ -38,7 +38,12 @@
 
   <mat-card-actions>
     <button mat-raised-button color="primary">Ver Detalles</button>
-    <button mat-raised-button color="accent" [disabled]="evento.estado !== EstadoEvento.Activo">
+    <button
+      mat-raised-button
+      color="accent"
+      [routerLink]="['/reservas']"
+      [queryParams]="{ eventoId: evento.id }"
+      [disabled]="evento.estado !== EstadoEvento.Activo">
       Reservar
     </button>
   </mat-card-actions>

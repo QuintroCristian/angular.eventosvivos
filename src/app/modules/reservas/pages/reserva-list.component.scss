@@ -1,0 +1,50 @@
+.reserva-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.reserva-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1rem;
+}
+
+.panel-form,
+.panel-list {
+  padding: 0.5rem;
+}
+
+.reserva-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.reservas-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.reserva-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 0.75rem;
+  background: #fafafa;
+}
+
+.loading-spinner,
+.empty-state {
+  display: flex;
+  justify-content: center;
+  padding: 1rem 0;
+}
+
+.feedback {
+  margin-top: 0.75rem;
+  font-weight: 600;
+}
+
+.feedback.success { color: #1b5e20; }
+.feedback.error { color: #c62828; }
