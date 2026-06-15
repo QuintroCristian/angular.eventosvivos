@@ -19,18 +19,32 @@ jobs:
         with:
           submodules: true
           lfs: false
+          
+      # --- 1. PASOS PARA COMPILAR MANUALMENTE ---
+      - name: Configurar Node.js correcto
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24.15.0'
+
+      - name: Instalar y construir Angular
+        run: |
+            npm install
+            npm run build
+      # ------------------------------------------
+            
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
         with:
-          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_HAPPY_SMOKE_08CE2320F }}
+          azure_static_web_apps_api_token: ${{ secrets.AZ_TOKEN_EVENTOSVIVOS_TEST }}
           repo_token: ${{ secrets.GITHUB_TOKEN }} # Used for Github integrations (i.e. PR comments)
           action: "upload"
-          ###### Repository/Build Configurations - These values can be configured to match your app requirements. ######
-          # For more information regarding Static Web App workflow configurations, please visit: https://aka.ms/swaworkflowconfig
-          app_location: "/" # App source code path
-          api_location: "" # Api source code path - optional
-          output_location: "dist/angular.eventosvivos/browser" # Built app content directory - optional
+          ###### Repository/Build Configurations ######
+          # --- 2. RUTAS ACTUALIZADAS PARA NO DEPENDER DE AZURE ---
+          app_location: "dist/angular.eventosvivos/browser" # Ruta de la app ya compilada
+          api_location: "" 
+          output_location: "" # Se deja vacío
+          skip_app_build: true # Ordena a Azure subir los archivos sin compilar
           ###### End of Repository/Build Configurations ######
 
   close_pull_request_job:
