@@ -9,28 +9,89 @@
       </mat-card-header>
 
       <mat-card-content>
-        <form class="reserva-form" (ngSubmit)="crearReserva()">
+        <form class="reserva-form" #reservaNgForm="ngForm" (ngSubmit)="crearReserva(reservaNgForm)">
           <mat-form-field appearance="outline">
             <mat-label>ID del evento</mat-label>
-            <input matInput type="number" [(ngModel)]="reservaForm.eventoId" name="eventoId" required>
+            <input
+              matInput
+              type="number"
+              [(ngModel)]="reservaForm.eventoId"
+              name="eventoId"
+              #eventoIdModel="ngModel"
+              required
+              min="1"
+              step="1">
+            @if (eventoIdModel.hasError('required') && (eventoIdModel.touched || reservaNgForm.submitted)) {
+              <mat-error>El ID del evento es obligatorio.</mat-error>
+            }
+            @if (eventoIdModel.hasError('min') && (eventoIdModel.touched || reservaNgForm.submitted)) {
+              <mat-error>El ID del evento debe ser mayor a 0.</mat-error>
+            }
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>Nombre del comprador</mat-label>
-            <input matInput [(ngModel)]="reservaForm.nombreComprador" name="nombreComprador">
+            <input
+              matInput
+              [(ngModel)]="reservaForm.nombreComprador"
+              name="nombreComprador"
+              #nombreModel="ngModel"
+              required
+              minlength="3"
+              maxlength="120">
+            @if (nombreModel.hasError('required') && (nombreModel.touched || reservaNgForm.submitted)) {
+              <mat-error>El nombre del comprador es obligatorio.</mat-error>
+            }
+            @if (nombreModel.hasError('minlength') && (nombreModel.touched || reservaNgForm.submitted)) {
+              <mat-error>El nombre debe tener al menos 3 caracteres.</mat-error>
+            }
+            @if (nombreModel.hasError('maxlength') && (nombreModel.touched || reservaNgForm.submitted)) {
+              <mat-error>El nombre no puede superar 120 caracteres.</mat-error>
+            }
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>Email</mat-label>
-            <input matInput type="email" [(ngModel)]="reservaForm.emailComprador" name="emailComprador">
+            <input
+              matInput
+              type="email"
+              [(ngModel)]="reservaForm.emailComprador"
+              name="emailComprador"
+              #emailModel="ngModel"
+              required
+              [pattern]="emailPattern">
+            @if (emailModel.hasError('required') && (emailModel.touched || reservaNgForm.submitted)) {
+              <mat-error>El correo es obligatorio.</mat-error>
+            }
+            @if (emailModel.hasError('pattern') && (emailModel.touched || reservaNgForm.submitted)) {
+              <mat-error>Formato inválido. Ejemplo: usuario@dominio.com</mat-error>
+            }
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>Cantidad</mat-label>
-            <input matInput type="number" min="1" [(ngModel)]="reservaForm.cantidad" name="cantidad" required>
+            <input
+              matInput
+              type="number"
+              min="1"
+              max="20"
+              step="1"
+              [(ngModel)]="reservaForm.cantidad"
+              name="cantidad"
+              #cantidadModel="ngModel"
+              required>
+            @if (cantidadModel.hasError('required') && (cantidadModel.touched || reservaNgForm.submitted)) {
+              <mat-error>La cantidad es obligatoria.</mat-error>
+            }
+            @if (cantidadModel.hasError('min') && (cantidadModel.touched || reservaNgForm.submitted)) {
+              <mat-error>La cantidad mínima es 1.</mat-error>
+            }
+            @if (cantidadModel.hasError('max') && (cantidadModel.touched || reservaNgForm.submitted)) {
+              <mat-error>La cantidad máxima permitida es 20.</mat-error>
+            }
           </mat-form-field>
 
-          <button mat-raised-button color="primary" type="submit" [disabled]="submitting()">
+          <button mat-raised-button color="primary" type="submit" [disabled]="submitting() || reservaNgForm.invalid">
             {{ submitting() ? 'Creando...' : 'Crear reserva' }}
           </button>
         </form>

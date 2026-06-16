@@ -1,6 +1,6 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -41,6 +41,9 @@ export class ReservaListComponent implements OnInit {
   };
 
   EstadoReserva = EstadoReserva;
+  readonly emailPattern = String.raw`[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$`;
+
+  private readonly emailRegex = new RegExp(`^${this.emailPattern}$`);
 
   private readonly apiService = inject(ApiService);
   private readonly route = inject(ActivatedRoute);
@@ -72,7 +75,38 @@ export class ReservaListComponent implements OnInit {
     });
   }
 
-  crearReserva(): void {
+  crearReserva(form?: NgForm): void {
+    if (form?.invalid) {
+      form.control.markAllAsTouched();
+      this.errorMessage.set('Completa correctamente todos los campos obligatorios.');
+      return;
+    }
+
+    const eventoId = Number(this.reservaForm.eventoId);
+    const cantidad = Number(this.reservaForm.cantidad);
+    const nombreComprador = (this.reservaForm.nombreComprador ?? '').trim();
+    const emailComprador = (this.reservaForm.emailComprador ?? '').trim();
+
+    if (!Number.isInteger(eventoId) || eventoId <= 0) {
+      this.errorMessage.set('El ID del evento debe ser un número entero mayor a 0.');
+      return;
+    }
+
+    if (nombreComprador.length < 3 || nombreComprador.length > 120) {
+      this.errorMessage.set('El nombre debe tener entre 3 y 120 caracteres.');
+      return;
+    }
+
+    if (!this.emailRegex.test(emailComprador)) {
+      this.errorMessage.set('El correo no tiene un formato válido.');
+      return;
+    }
+
+    if (!Number.isInteger(cantidad) || cantidad <= 0 || cantidad > 20) {
+      this.errorMessage.set('La cantidad debe ser un número entero entre 1 y 20.');
+      return;
+    }
+
     if (!this.reservaForm.eventoId || this.reservaForm.cantidad <= 0) {
       this.errorMessage.set('Completa los campos obligatorios para crear la reserva.');
       return;
@@ -83,10 +117,10 @@ export class ReservaListComponent implements OnInit {
     this.successMessage.set('');
 
     const payload: CrearReservaRequest = {
-      eventoId: Number(this.reservaForm.eventoId),
-      nombreComprador: this.reservaForm.nombreComprador || null,
-      emailComprador: this.reservaForm.emailComprador || null,
-      cantidad: Number(this.reservaForm.cantidad)
+      eventoId,
+      nombreComprador,
+      emailComprador,
+      cantidad
     };
 
     this.apiService.crearReserva(payload).subscribe({
