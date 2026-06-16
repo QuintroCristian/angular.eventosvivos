@@ -10,7 +10,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { Subject, merge, takeUntil, debounceTime, distinctUntilChanged } from 'rxjs';
+import { Subject, takeUntil, debounceTime } from 'rxjs';
 import { ApiService } from '../../../../core/http/api.service';
 import { FiltroEventoRequest } from '../../../../core/models/filtro-evento.model';
 import { TipoEvento, EstadoEvento } from '../../../../core/models/enums';
@@ -88,28 +88,13 @@ export class EventoFilterComponent implements OnInit, OnDestroy {
   }
 
   private watchFormChanges(): void {
-    // 1. Extraemos los controles directamente para mayor limpieza y seguridad de tipado
-    const { titulo, tipo, estado, venueId, fechaInicio, fechaFin } = this.filterForm.controls;
-
-    // 2. titulo: debounce 400 ms para no disparar por cada tecla
-    const titulo$ = titulo.valueChanges.pipe(
-      debounceTime(400),
-      distinctUntilChanged()
-    );
-
-    // 3. Selects y fechas: reaccionan de forma inmediata.
-    // Aplicamos distinctUntilChanged individualmente si es estrictamente necesario.
-    const instant$ = merge(
-      tipo.valueChanges.pipe(distinctUntilChanged()),
-      estado.valueChanges.pipe(distinctUntilChanged()),
-      venueId.valueChanges.pipe(distinctUntilChanged()),
-      fechaInicio.valueChanges.pipe(distinctUntilChanged()),
-      fechaFin.valueChanges.pipe(distinctUntilChanged())
-    );
-
-    // 4. Unimos ambos comportamientos y escuchamos
-    merge(titulo$, instant$)
-      .pipe(takeUntil(this.destroy$))
+    // Observar cambios en todo el formulario
+    // debounceTime(200) para que se procese rápidamente pero evita múltiples emisiones
+    this.filterForm.valueChanges
+      .pipe(
+        debounceTime(200),
+        takeUntil(this.destroy$)
+      )
       .subscribe(() => this.emitFiltros());
   }
 
