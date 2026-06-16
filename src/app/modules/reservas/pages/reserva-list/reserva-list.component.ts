@@ -7,9 +7,9 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { ApiService } from '../../../core/http/api.service';
-import { CrearReservaRequest, ReservaResponseDto } from '../../../core/models/reserva.model';
-import { EstadoReserva } from '../../../core/models/enums';
+import { ApiService } from '../../../../core/http/api.service';
+import { CrearReservaRequest, ReservaResponseDto } from '../../../../core/models/reserva.model';
+import { EstadoReserva } from '../../../../core/models/enums';
 
 @Component({
   selector: 'app-reserva-list',

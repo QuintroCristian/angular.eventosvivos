@@ -4,9 +4,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { RouterLink, RouterModule } from '@angular/router';
-import { ApiService } from '../../../core/http/api.service';
-import { EventoResponseDto } from '../../../core/models/evento.model';
-import { EventoCardComponent } from '../components/evento-card.component';
+import { ApiService } from '../../../../core/http/api.service';
+import { EventoResponseDto } from '../../../../core/models/evento.model';
+import { EventoCardComponent } from '../../components/evento-card/evento-card.component';
 
 @Component({
   selector: 'app-evento-list',

@@ -12,11 +12,11 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
-import { ApiService } from '../../../core/http/api.service';
-import { CreateEventoRequest } from '../../../core/models/evento.model';
-import { VenueResponseDto } from '../../../core/models/venue.model';
-import { TipoEvento } from '../../../core/models/enums';
-import { EventoValidators } from '../../../core/validators/evento.validators';
+import { ApiService } from '../../../../core/http/api.service';
+import { CreateEventoRequest } from '../../../../core/models/evento.model';
+import { VenueResponseDto } from '../../../../core/models/venue.model';
+import { TipoEvento } from '../../../../core/models/enums';
+import { EventoValidators } from '../../../../core/validators/evento.validators';
 
 @Component({
   selector: 'app-crear-evento',

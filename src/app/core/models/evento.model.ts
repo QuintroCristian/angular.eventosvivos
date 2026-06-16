@@ -23,4 +23,4 @@ export interface CreateEventoRequest {
   fechaFin: string;
   precio: number;
   tipo: TipoEvento;
-}
+} 

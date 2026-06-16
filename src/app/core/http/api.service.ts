@@ -65,10 +65,7 @@ export class ApiService {
   }
 
   getVenues(): Observable<VenueResponseDto[]> {
-    return this.http.get<VenueResponseDto[]>(`${this.baseUrl}/Venues/Listar`);
+    return this.http.get<VenueResponseDto[]>(`${this.baseUrl}/Venues/ListarVenues`);
   }
 
-  getVenueById(id: number): Observable<VenueResponseDto> {
-    return this.http.get<VenueResponseDto>(`${this.baseUrl}/Venues/Obtener/${id}`);
-  }
 }
