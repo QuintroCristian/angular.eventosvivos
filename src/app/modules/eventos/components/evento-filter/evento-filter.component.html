@@ -4,20 +4,6 @@
 
       <div class="filter-row">
 
-        <!-- TÍTULO — búsqueda parcial LIKE/ILIKE -->
-        <mat-form-field appearance="outline" class="filter-field filter-field--wide">
-          <mat-label>Buscar por título</mat-label>
-          <mat-icon matPrefix>search</mat-icon>
-          <input matInput formControlName="titulo" placeholder="Escribe para buscar…" autocomplete="off">
-          @if (filterForm.get('titulo')?.value) {
-            <button mat-icon-button matSuffix
-                    (click)="filterForm.get('titulo')?.reset('')"
-                    matTooltip="Limpiar" type="button">
-              <mat-icon>close</mat-icon>
-            </button>
-          }
-        </mat-form-field>
-
         <!-- TIPO DE EVENTO — filtrado exacto -->
         <mat-form-field appearance="outline" class="filter-field">
           <mat-label>Tipo de evento</mat-label>
@@ -70,7 +56,18 @@
           <mat-datepicker-toggle matSuffix [for]="pickerHasta"></mat-datepicker-toggle>
           <mat-datepicker #pickerHasta></mat-datepicker>
         </mat-form-field>
-
+        
+        <!-- TÍTULO — búsqueda parcial LIKE/ILIKE -->
+        <mat-form-field appearance="outline" class="filter-field filter-field--wide">
+          <mat-label>Buscar por título</mat-label>
+          <mat-icon matPrefix>search</mat-icon>
+          <input matInput formControlName="titulo" placeholder="Escribe para buscar…" autocomplete="off">
+          @if (filterForm.get('titulo')?.value) {
+          <button mat-icon-button matSuffix (click)="filterForm.get('titulo')?.reset('')" matTooltip="Limpiar" type="button">
+            <mat-icon>close</mat-icon>
+          </button>
+          }
+        </mat-form-field>
       </div>
 
       <!-- Botón limpiar — solo visible cuando hay algún filtro activo -->

@@ -15,7 +15,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { ApiService } from '../../../../core/http/api.service';
 import { CreateEventoRequest } from '../../../../core/models/evento.model';
 import { VenueResponseDto } from '../../../../core/models/venue.model';
-import { TipoEvento } from '../../../../core/models/enums';
+import { EstadoEvento, TipoEvento } from '../../../../core/models/enums';
 import { EventoValidators } from '../../../../core/validators/evento.validators';
 
 @Component({
@@ -153,15 +153,26 @@ export class CrearEventoComponent implements OnInit {
     this.submitting.set(true);
 
     const formValue = this.form.value;
+    const selectedVenue = this.venues().find((v) => v.id === Number(formValue.venueId));
+
+    if (!selectedVenue) {
+      this.submitting.set(false);
+      this.snackBar.open('No se encontró el lugar seleccionado. Intenta nuevamente.', 'Cerrar', { duration: 5000 });
+      return;
+    }
+
     const request: CreateEventoRequest = {
       titulo: formValue.titulo,
       descripcion: formValue.descripcion,
       venueId: Number(formValue.venueId),
+      venueNombre: selectedVenue.nombre,
+      venueCiudad: selectedVenue.ciudad,
       capacidadMaxima: Number(formValue.capacidadMaxima),
       fechaInicio: new Date(formValue.fechaInicio).toISOString(),
       fechaFin: new Date(formValue.fechaFin).toISOString(),
       precio: Number(formValue.precio),
-      tipo: Number(formValue.tipo)
+      tipo: Number(formValue.tipo),
+      estado: EstadoEvento.Activo
     };
 
     this.apiService.crearEvento(request).subscribe({

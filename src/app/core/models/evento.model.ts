@@ -18,10 +18,13 @@ export interface EventoResponseDto {
 export interface CreateEventoRequest {
   titulo: string;
   descripcion: string;
-  venueId: number;
+  venueId?: number;
+  venueNombre: string;
+  venueCiudad: string;
   capacidadMaxima: number;
   fechaInicio: string;
   fechaFin: string;
   precio: number;
   tipo: TipoEvento;
+  estado: EstadoEvento;
 } 
