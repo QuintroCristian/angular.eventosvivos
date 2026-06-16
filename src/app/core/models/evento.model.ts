@@ -8,6 +8,7 @@ export interface EventoResponseDto {
   fechaFin: string;
   tipo: TipoEvento;
   estado: EstadoEvento;
+  venueId?: number | null;
   venueNombre?: string | null;
   venueCiudad?: string | null;
   capacidadMaxima: number;

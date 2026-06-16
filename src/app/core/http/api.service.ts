@@ -3,6 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { EventoResponseDto, CreateEventoRequest } from '../models/evento.model';
+import { FiltroEventoRequest } from '../models/filtro-evento.model';
 import { CrearReservaRequest, ReservaResponseDto } from '../models/reserva.model';
 import { VenueResponseDto } from '../models/venue.model';
 
@@ -13,11 +14,14 @@ export class ApiService {
   private readonly http = inject(HttpClient);
   private readonly baseUrl = environment.apiUrl;
 
-  getEventos(filtros?: any): Observable<EventoResponseDto[]> {
+  getEventos(filtros?: FiltroEventoRequest): Observable<EventoResponseDto[]> {
     let params = new HttpParams();
-    if (filtros?.tipo !== undefined) params = params.set('tipo', filtros.tipo);
-    if (filtros?.estado !== undefined) params = params.set('estado', filtros.estado);
-
+    if (filtros?.tipo != null)        params = params.set('tipo', filtros.tipo.toString());
+    if (filtros?.estado != null)      params = params.set('estado', filtros.estado.toString());
+    if (filtros?.titulo?.trim())      params = params.set('titulo', filtros.titulo.trim());
+    if (filtros?.fechaInicio)         params = params.set('fechaInicio', filtros.fechaInicio);
+    if (filtros?.fechaFin)            params = params.set('fechaFin', filtros.fechaFin);
+    if (filtros?.venueId != null)     params = params.set('venueId', filtros.venueId.toString());
     return this.http.get<EventoResponseDto[]>(`${this.baseUrl}/Eventos/ListarEventos`, { params });
   }
 
