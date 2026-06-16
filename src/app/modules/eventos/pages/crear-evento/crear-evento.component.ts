@@ -100,17 +100,21 @@ export class CrearEventoComponent implements OnInit {
 
     if (venueIdControl && capacidadControl) {
       venueIdControl.valueChanges.subscribe((venueId) => {
-        if (venueId) {
-          const selectedVenue = this.venues().find((v) => v.id === parseInt(venueId));
-          if (selectedVenue) {
-            capacidadControl.clearAsyncValidators();
-            capacidadControl.setValidators([
-              Validators.required,
-              EventoValidators.positiveNumber(),
-              EventoValidators.maxCapacity(selectedVenue.capacidad)
-            ]);
-            capacidadControl.updateValueAndValidity({ emitEvent: false });
-          }
+        if (!venueId) {
+          capacidadControl.setValue('', { emitEvent: false });
+          return;
+        }
+
+        const selectedVenue = this.venues().find((v) => v.id === Number(venueId));
+        if (selectedVenue) {
+          capacidadControl.setValue(selectedVenue.capacidad, { emitEvent: false });
+          capacidadControl.clearAsyncValidators();
+          capacidadControl.setValidators([
+            Validators.required,
+            EventoValidators.positiveNumber(),
+            EventoValidators.maxCapacity(selectedVenue.capacidad)
+          ]);
+          capacidadControl.updateValueAndValidity({ emitEvent: false });
         }
       });
     }

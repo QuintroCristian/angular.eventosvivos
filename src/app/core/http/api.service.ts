@@ -69,7 +69,7 @@ export class ApiService {
   }
 
   getVenues(): Observable<VenueResponseDto[]> {
-    return this.http.get<VenueResponseDto[]>(`${this.baseUrl}/Venues/ListarVenues`);
+    return this.http.get<VenueResponseDto[]>(`${this.baseUrl}/Eventos/Venues`);
   }
 
 }
