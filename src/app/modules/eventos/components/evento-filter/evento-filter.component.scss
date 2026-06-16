@@ -1,0 +1,44 @@
+.filter-panel {
+  margin-bottom: 24px;
+  background-color: #fafafa;
+}
+
+.filter-form {
+  width: 100%;
+}
+
+.filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.filter-field {
+  flex: 1 1 200px;
+  min-width: 180px;
+
+  &--wide {
+    flex: 2 1 280px;
+  }
+}
+
+.filter-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 4px;
+
+  button {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+}
+
+// Responsive: en móvil todos los campos ocupan ancho completo
+@media (max-width: 600px) {
+  .filter-field,
+  .filter-field--wide {
+    flex: 1 1 100%;
+  }
+}

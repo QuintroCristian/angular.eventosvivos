@@ -8,8 +8,20 @@ export interface EventoResponseDto {
   fechaFin: string;
   tipo: TipoEvento;
   estado: EstadoEvento;
+  venueId?: number | null;
   venueNombre?: string | null;
   venueCiudad?: string | null;
   capacidadMaxima: number;
   precio: number;
 }
+
+export interface CreateEventoRequest {
+  titulo: string;
+  descripcion: string;
+  venueId: number;
+  capacidadMaxima: number;
+  fechaInicio: string;
+  fechaFin: string;
+  precio: number;
+  tipo: TipoEvento;
+} 

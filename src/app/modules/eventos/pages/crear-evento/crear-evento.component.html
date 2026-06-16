@@ -1,0 +1,151 @@
+<div class="crear-evento-container">
+  <mat-card class="crear-evento-card">
+    <mat-card-header>
+      <mat-card-title>Crear Nuevo Evento</mat-card-title>
+      <mat-card-subtitle>Completa todos los campos para crear un nuevo evento</mat-card-subtitle>
+    </mat-card-header>
+
+    @if (loading()) {
+      <div class="loading-spinner">
+        <mat-spinner></mat-spinner>
+        <p>Cargando información...</p>
+      </div>
+    } @else {
+      <mat-card-content>
+        <form [formGroup]="form">
+          <!-- TÍTULO -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Título del evento</mat-label>
+            <input matInput formControlName="titulo" required placeholder="Ej: Conferencia de Angular 2024">
+            @if (form.get('titulo')?.hasError('required') && form.get('titulo')?.touched) {
+              <mat-error>El título es obligatorio</mat-error>
+            }
+            @if (form.get('titulo')?.hasError('minlength') && form.get('titulo')?.touched) {
+              <mat-error>El título debe tener al menos 5 caracteres</mat-error>
+            }
+            @if (form.get('titulo')?.hasError('maxlength') && form.get('titulo')?.touched) {
+              <mat-error>El título no puede exceder 100 caracteres</mat-error>
+            }
+          </mat-form-field>
+
+          <!-- DESCRIPCIÓN -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Descripción</mat-label>
+            <textarea matInput formControlName="descripcion" rows="4" required
+              placeholder="Describe el evento detalladamente (10-500 caracteres)"></textarea>
+            @if (form.get('descripcion')?.hasError('required') && form.get('descripcion')?.touched) {
+              <mat-error>La descripción es obligatoria</mat-error>
+            }
+            @if (form.get('descripcion')?.hasError('minlength') && form.get('descripcion')?.touched) {
+              <mat-error>La descripción debe tener al menos 10 caracteres</mat-error>
+            }
+            @if (form.get('descripcion')?.hasError('maxlength') && form.get('descripcion')?.touched) {
+              <mat-error>La descripción no puede exceder 500 caracteres</mat-error>
+            }
+          </mat-form-field>
+
+          <!-- VENUE -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Lugar del evento</mat-label>
+            <mat-select formControlName="venueId" required>
+              <mat-optgroup label="Venues disponibles">
+                @for (venue of venues(); track venue.id) {
+                  <mat-option [value]="venue.id">
+                    {{ venue.nombre }} - {{ venue.ciudad }} (Capacidad: {{ venue.capacidad }})
+                  </mat-option>
+                }
+              </mat-optgroup>
+            </mat-select>
+            @if (form.get('venueId')?.hasError('required') && form.get('venueId')?.touched) {
+              <mat-error>Debes seleccionar un lugar</mat-error>
+            }
+          </mat-form-field>
+
+          <!-- CAPACIDAD MÁXIMA -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Capacidad máxima</mat-label>
+            <input matInput type="number" formControlName="capacidadMaxima" required
+              placeholder="Ej: 100" min="1">
+            @if (form.get('capacidadMaxima')?.hasError('required') && form.get('capacidadMaxima')?.touched) {
+              <mat-error>La capacidad máxima es obligatoria</mat-error>
+            }
+            @if (form.get('capacidadMaxima')?.hasError('notPositive') && form.get('capacidadMaxima')?.touched) {
+              <mat-error>La capacidad debe ser un número positivo</mat-error>
+            }
+            @if (form.get('capacidadMaxima')?.hasError('capacityExceeded') && form.get('capacidadMaxima')?.touched) {
+              <mat-error>
+                La capacidad no puede exceder {{ form.get('capacidadMaxima')?.getError('capacityExceeded')?.max }}
+              </mat-error>
+            }
+          </mat-form-field>
+
+          <!-- TIPO DE EVENTO -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Tipo de evento</mat-label>
+            <mat-select formControlName="tipo" required>
+              <mat-optgroup label="Tipos de evento">
+                @for (option of tipoEventoOptions; track option.value) {
+                  <mat-option [value]="option.value">{{ option.label }}</mat-option>
+                }
+              </mat-optgroup>
+            </mat-select>
+            @if (form.get('tipo')?.hasError('required') && form.get('tipo')?.touched) {
+              <mat-error>Debes seleccionar un tipo de evento</mat-error>
+            }
+          </mat-form-field>
+
+          <!-- FECHA Y HORA DE INICIO -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Fecha y hora de inicio</mat-label>
+            <input matInput type="datetime-local" formControlName="fechaInicio" required
+              (change)="updateEndDateValidation()">
+            @if (form.get('fechaInicio')?.hasError('required') && form.get('fechaInicio')?.touched) {
+              <mat-error>La fecha de inicio es obligatoria</mat-error>
+            }
+            @if (form.get('fechaInicio')?.hasError('pastDate') && form.get('fechaInicio')?.touched) {
+              <mat-error>La fecha de inicio debe ser futura</mat-error>
+            }
+          </mat-form-field>
+
+          <!-- FECHA Y HORA DE FIN -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Fecha y hora de fin</mat-label>
+            <input matInput type="datetime-local" formControlName="fechaFin" required>
+            @if (form.get('fechaFin')?.hasError('required') && form.get('fechaFin')?.touched) {
+              <mat-error>La fecha de fin es obligatoria</mat-error>
+            }
+            @if (form.get('fechaFin')?.hasError('endBeforeStart') && form.get('fechaFin')?.touched) {
+              <mat-error>La fecha de fin debe ser posterior a la de inicio</mat-error>
+            }
+          </mat-form-field>
+
+          <!-- PRECIO DE ENTRADA -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Precio de entrada</mat-label>
+            <input matInput type="number" formControlName="precio" required placeholder="Ej: 29.99" min="0" step="0.01">
+            @if (form.get('precio')?.hasError('required') && form.get('precio')?.touched) {
+              <mat-error>El precio es obligatorio</mat-error>
+            }
+            @if (form.get('precio')?.hasError('notPositive') && form.get('precio')?.touched) {
+              <mat-error>El precio debe ser un número positivo</mat-error>
+            }
+          </mat-form-field>
+        </form>
+      </mat-card-content>
+
+      <mat-card-actions>
+        <button mat-raised-button color="accent" (click)="volver()" [disabled]="submitting()">
+          Cancelar
+        </button>
+        <button mat-raised-button color="primary" (click)="crearEvento()" [disabled]="form.invalid || submitting()">
+          @if (submitting()) {
+            <mat-spinner diameter="20"></mat-spinner>
+            Creando...
+          } @else {
+            Crear Evento
+          }
+        </button>
+      </mat-card-actions>
+    }
+  </mat-card>
+</div>
